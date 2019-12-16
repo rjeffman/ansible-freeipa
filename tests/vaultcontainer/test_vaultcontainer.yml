@@ -1,0 +1,161 @@
+---
+- name: Test vault container.
+  hosts: ipaserver
+  become: true
+  gather_facts: false
+
+  tasks:
+  - name: Ensure test users are absent.
+    ipauser:
+      ipaadmin_password: MyPassword123
+      name: user01, user02, user03
+      state: absent
+
+  - name: Ensure test group is absent
+    ipagroup:
+      ipaadmin_password: MyPassword123
+      name: testusers
+      state: absent
+
+  - name: Ensure test group is present
+    ipagroup:
+      ipaadmin_password: MyPassword123
+      name: testusers
+
+  - name: Ensure test user 1 is present.
+    ipauser:
+      ipaadmin_password: MyPassword123
+      name: user01
+      first: User
+      last: One
+
+  - name: Ensure test user 2 is present.
+    ipauser:
+      ipaadmin_password: MyPassword123
+      name: user02
+      first: User
+      last: Two
+
+  - name: Ensure test user 3 is present.
+    ipauser:
+      ipaadmin_password: MyPassword123
+      name: user03
+      first: User
+      last: Three
+
+  - name: Ensure test vaultcontainer is absent.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      state: absent
+
+  - name: Ensure vaultcontainer is present.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+    register: result
+    failed_when: not result.changed
+
+  - name: Ensure vaultcontainer is present, again.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+    register: result
+    failed_when: result.changed
+
+  - name: Ensure users, groups and services are members of the vaultcontainer.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      users:
+      - user01
+      - user02
+      groups:
+      - testusers
+      services:
+      - "HTTP/{{ groups.ipaserver[0] }}"
+      action: member
+    register: result
+    failed_when: not result.changed
+
+  - name: Ensure users, groups and services are members of the vaultcontainer, again.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      users:
+      - user01
+      - user02
+      groups:
+      - testusers
+      services:
+      - "HTTP/{{ groups.ipaserver[0] }}"
+      action: member
+    register: result
+    failed_when: result.changed
+
+  - name: Ensure users, groups and services are not members of the vaultcontainer.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      users:
+      - user01
+      - user02
+      groups:
+      - testusers
+      services:
+      - "HTTP/{{ groups.ipaserver[0] }}"
+      action: member
+      state: absent
+    register: result
+    failed_when: not result.changed
+
+  - name: Ensure users, groups and services are not members of the vaultcontainer, again.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      users:
+      - user01
+      - user02
+      groups:
+      - testusers
+      services:
+      - "HTTP/{{ groups.ipaserver[0] }}"
+      action: member
+      state: absent
+    register: result
+    failed_when: result.changed
+
+  - name: Ensure vaultcontainer is absent.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      state: absent
+    register: result
+    failed_when: not result.changed
+
+  - name: Ensure vaultcontainer is absent, again.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      state: absent
+    register: result
+    failed_when: result.changed
+
+  # cleanup
+  - name: Ensure test vaultcontainer is absent.
+    ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: user01
+      state: absent
+
+  - name: Ensure test user is absent.
+    ipauser:
+      ipaadmin_password: MyPassword123
+      name: user01
+      state: absent
+
+  - name: Ensure test group is absent
+    ipagroup:
+      ipaadmin_password: MyPassword123
+      name: testusers
+      state: absent

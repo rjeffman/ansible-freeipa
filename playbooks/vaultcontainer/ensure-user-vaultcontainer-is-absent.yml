@@ -1,0 +1,11 @@
+---
+- name: Tests
+  hosts: ipaserver
+  become: true
+  gather_facts: false
+
+  tasks:
+  - ipavaultcontainer:
+      ipaadmin_password: MyPassword123
+      username: admin
+      state: absent
