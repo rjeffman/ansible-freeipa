@@ -63,6 +63,22 @@ IPA_SERVER_HOST=<ipaserver_host_or_ip> pytest -rs
 
 For a complete list of options check `pytest --help`.
 
+### Disabling and enabling playbook tests
+
+Sometimes it useful to enable or disable specific playbook tests. To only run a subset of modules or tests, use the variables ENABLED_MODULES or ENABLED_TESTS, to define a colon-separated list of tests to be enabled. Any test or module not in the list will not be executed. For example, to run only sudorule tests:
+
+```
+ENABLE_MODULES="sudorule" IPA_SERVER_HOST=<ipaserver_host_or_ip> pytest
+```
+
+If all but a few selected tests are to be executed, use the DISABLED_MODULES or DISABLED_TESTS. For example, to run all, but "test_service_certificate" test:
+
+```
+DISABLED_TESTS=test_service_certificate IPA_SERVER_HOST=<ipaserver_host_or_ip> pytest
+```
+
+Although more useful when running the tests locally, tests can be disabled on the project CI by setting the `default` value for `disabled_modules` or `disabled_tests` in [`azure/azure-pipelines.yml`](azure/azure-pipelines.yml) parameters.
+
 ### Types of tests
 
 #### Playbook tests
@@ -116,6 +132,7 @@ molecule destroy -s centos-8
 ```
 
 See [Running the tests](#running-the-tests) section for more information on available options.
+
 
 ## Upcoming/desired improvements:
 

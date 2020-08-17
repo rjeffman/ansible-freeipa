@@ -24,7 +24,7 @@ import functools
 
 from unittest import TestCase
 
-from utils import get_test_playbooks, get_server_host, run_playbook
+from utils import get_test_playbooks, get_skip_conditions, run_playbook
 
 
 def prepare_test(test_name, test_path):
@@ -50,14 +50,12 @@ def prepare_test(test_name, test_path):
 #   test_* methods.
 for test_dir_name, playbooks_in_dir in get_test_playbooks().items():
     _tests = {}
+
     for playbook in playbooks_in_dir:
         test_name = playbook["name"].replace("-", "_")
         test_path = playbook["path"]
 
-        @pytest.mark.skipif(
-            not get_server_host(),
-            reason="Environment variable IPA_SERVER_HOST must be set",
-        )
+        @pytest.mark.skipif(**get_skip_conditions(test_dir_name, test_name))
         @pytest.mark.playbook
         @prepare_test(test_name, test_path)
         def method(self, test_path, test_name):

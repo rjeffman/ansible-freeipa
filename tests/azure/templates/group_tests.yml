@@ -5,6 +5,10 @@ parameters:
     default: centos-8
   - name: build_number
     type: string
+  - name: disabled_modules
+    type: string
+  - name: disabled_tests
+    type: string
 
 jobs:
 - template: playbook_tests.yml
@@ -13,6 +17,8 @@ jobs:
     number_of_groups: 3
     build_number: ${{ parameters.build_number }}
     scenario: ${{ parameters.scenario }}
+    disabled_modules: disabled_modules
+    disabled_tests: disabled_tests
 
 - template: playbook_tests.yml
   parameters:
@@ -20,6 +26,8 @@ jobs:
     number_of_groups: 3
     build_number: ${{ parameters.build_number }}
     scenario: ${{ parameters.scenario }}
+    disabled_modules: disabled_modules
+    disabled_tests: disabled_tests
 
 - template: playbook_tests.yml
   parameters:
@@ -27,6 +35,8 @@ jobs:
     number_of_groups: 3
     build_number: ${{ parameters.build_number }}
     scenario: ${{ parameters.scenario }}
+    disabled_modules: disabled_modules
+    disabled_tests: disabled_tests
 
 - template: pytest_tests.yml
   parameters:

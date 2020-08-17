@@ -17,7 +17,10 @@ parameters:
     default: 3.6
   - name: build_number
     type: string
-
+  - name: disabled_modules
+    type: string
+  - name: disabled_tests
+    type: string
 
 jobs:
 - job: Test_Group${{ parameters.group_number }}
@@ -58,6 +61,8 @@ jobs:
     env:
       IPA_SERVER_HOST: ${{ parameters.scenario }}
       RUN_TESTS_IN_DOCKER: true
+      IPA_DISABLED_MODULES: ${{ parameters.disabled_modules }}
+      IPA_DISABLED_TESTS: ${{ parameters.disabled_tests }}
 
   - task: PublishTestResults@2
     inputs:
