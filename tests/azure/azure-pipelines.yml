@@ -16,7 +16,7 @@ parameters:
   # Multiple modules can be disabled, separated by colon (':').
   - name: disabled_modules
     type: string
-    default: ""
+    default: "trust"
   # Disabled tests have the form '<module>/test_<test_name>'
   # Multiple tests can be disabled, separated by colon (':').
   - name: disabled_tests
