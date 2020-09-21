@@ -172,4 +172,3 @@
       state: absent
     register: result
     failed_when: not result.changed
-
