@@ -16,13 +16,9 @@ rules:
   truthy:
     allowed-values: ["yes", "no", "true", "false", "True", "False"]
     level: error
+  # Ansible line length is 160.
+  line-length: {max: 160}
   # Disabled rules
-  document-start: disable
   indentation: disable
-  line-length: disable
-  colons: disable
-  empty-lines: disable
   comments: disable
   comments-indentation: disable
-  trailing-spaces: disable
-  new-line-at-end-of-file: disable

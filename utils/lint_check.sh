@@ -18,6 +18,7 @@ yaml_dirs=(
     "${topdir}/playbooks/*/*.yml"
     "${topdir}/molecule/*/*.yml"
     "${topdir}/molecule/*/*/*.yml"
+    "${topdir}/roles/*/*/*.yml"
 )
 
 ansible-lint --force-color ${yaml_dirs[@]}

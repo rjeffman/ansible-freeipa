@@ -1,3 +1,5 @@
 -r requirements-tests.txt
 ipdb
 pre-commit
+ansible-lint>=4.3.7
+yamllint
