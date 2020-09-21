@@ -33,6 +33,7 @@
 
 - name: Get services from backup
   shell: >
+    set -o pipefail
     grep "^services = " "{{ ipabackup_dir }}/{{ ipabackup_item }}/header" | cut -d"=" -f2 | tr -d '[:space:]'
   register: result_services_grep
 

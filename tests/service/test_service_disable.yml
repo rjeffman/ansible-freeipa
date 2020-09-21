@@ -14,7 +14,7 @@
 
   tasks:
   - name: Get Kerberos ticket for `admin`.
-    shell: echo SomeADMINpassword | kinit -c ${KRB5CCNAME} admin
+    shell: set -o pipefail && echo SomeADMINpassword | kinit -c ${KRB5CCNAME} admin
 
   - name: Ensure service is absent
     ipaservice:

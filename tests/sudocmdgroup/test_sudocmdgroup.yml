@@ -76,6 +76,7 @@
 
   - name: Verify sudocmdgroup creation with sudocmds
     shell: |
+      set -o pipefail
       echo SomeADMINpassword | kinit -c verify_sudocmdgroup admin
       KRB5CCNAME="verify_sudocmdgroup" ipa sudocmdgroup-show network --all
       kdestroy -A -q -c verify_sudocmdgroup
