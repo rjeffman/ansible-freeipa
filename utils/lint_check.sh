@@ -2,7 +2,9 @@
 
 topdir=`dirname $(dirname $0)`
 
+echo "Running 'flake8'."
 flake8 .
+echo "Running 'pydocstyle'."
 pydocstyle .
 
 ANSIBLE_LIBRARY=${ANSIBLE_LIBRARY:-"${topdir}/plugins/modules"}
@@ -21,6 +23,10 @@ yaml_dirs=(
     "${topdir}/roles/*/*/*.yml"
 )
 
+echo "Missing file warnings are expected and can be ignored."
+
+echo "Running 'ansible-lint'."
 ansible-lint --force-color ${yaml_dirs[@]}
 
+echo "Running 'yamllint'."
 yamllint -f colored ${yaml_dirs[@]}
