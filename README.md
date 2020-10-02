@@ -11,6 +11,9 @@ Features
 * Cluster deployments: Server, replicas and clients in one playbook
 * One-time-password (OTP) support for client installation
 * Repair mode for clients
+* Modules for config management
+* Modules for delegation management
+* Modules for dns config management
 * Modules for dns forwarder management
 * Modules for dns record management
 * Modules for dns zone management
@@ -20,8 +23,11 @@ Features
 * Modules for hbacsvcgroup management
 * Modules for host management
 * Modules for hostgroup management
+* Modules for location management
+* Modules for privilege management
 * Modules for pwpolicy management
 * Modules for role management
+* Modules for selfservice management
 * Modules for service management
 * Modules for sudocmd management
 * Modules for sudocmdgroup management
