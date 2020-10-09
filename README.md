@@ -1,35 +1,63 @@
-FreeIPA Ansible collection
+FreeIPA Ansible Collection
 ==========================
 
-This repository contains [Ansible](https://www.ansible.com/) roles and playbooks to install and uninstall [FreeIPA](https://www.freeipa.org/) `servers`, `replicas` and `clients`. Also modules for group, host, topology and user management.
+The FreeIPA Ansible Collection provides [Ansible](https://www.ansible.com/) roles and playbooks to install and uninstall [FreeIPA](https://www.freeipa.org/) `servers`, `replicas` and `clients`. It also provides modules and playbooks to manage FreeIPA installations.
 
-**Note**: The ansible playbooks and roles require a configured ansible environment where the ansible nodes are reachable and are properly set up to have an IP address and a working package manager.
+> **Note**: A configured Ansible environment where the Ansible nodes are reachable and are properly set up is required for both roles and modules, and it might be required a properly configure IP address. The Ansible roles require a working package manager.
 
-Features
---------
-* Server, replica and client deployment
-* Cluster deployments: Server, replicas and clients in one playbook
-* One-time-password (OTP) support for client installation
-* Repair mode for clients
-* Modules for dns forwarder management
-* Modules for dns record management
-* Modules for dns zone management
-* Modules for group management
-* Modules for hbacrule management
-* Modules for hbacsvc management
-* Modules for hbacsvcgroup management
-* Modules for host management
-* Modules for hostgroup management
-* Modules for pwpolicy management
-* Modules for role management
-* Modules for service management
-* Modules for sudocmd management
-* Modules for sudocmdgroup management
-* Modules for sudorule management
-* Modules for topology management
-* Modules fot trust management
-* Modules for user management
-* Modules for vault management
+
+Roles and Modules
+=================
+
+These are the roles and modules currently available. If you want to write a new module please read [writing a new module](plugins/modules/README.md).
+
+
+Roles
+-----
+
+Roles for server, replica and client deployment, with support for cluster deployments in a single playbook. Client role supports one-time-password (OTP) for installation, and repair mode.
+
+* [Server](docs/roles/README-ipaserver.md)
+* [Replica](docs/roles/README-ipareplica.md)
+* [Client](docs/roles/README-ipaclient.md)
+
+
+Modules
+-------
+
+All modules can be found under `plugins/modules`.
+
+* [ipaconfig](docs/modules/config.md): global server configuration
+* [ipadelegation](docs/modules/delegation.md): delegation management
+* [ipadnsconfig](docs/modules/dnsconfig.md): dns configuration
+* [ipadnsforwardzone](docs/modules/dnsforwardzone.md): dns forwarder management
+* [ipadnsrecord](docs/modules/dnsrecord.md): dns record management
+* [ipadnszone](docs/modules/dnszone.md): dns zone management
+* [ipagroup](docs/modules/group.md): group management
+* [ipahbacrule](docs/modules/hbacrule.md): hbacrule management
+* [ipahbacsvc](docs/modules/hbacsvc.md): hbacsvc management
+* [ipahbacsvcgroup](docs/modules/hbacsvc.md): hbacsvcgroup management
+* [ipahost](docs/modules/host.md): host management
+* [ipahostgroup](docs/modules/hostgroup.md): hostgroup management
+* [ipalocation](docs/modules/location.md): location management
+* [ipaprivilege](docs/modules/privilege.md): privilege management
+* [ipapwpolicy](docs/modules/pwpolicy.md): pwpolicy management
+* [iparole](docs/modules/role.md): role management
+* [ipaselfservice](docs/modules/selfservice.md): selfservice management
+* [ipaservice](docs/modules/service.md): service management
+* [ipasudocmd](docs/modules/sudocmd.md): sudocmd management
+* [ipasudocmdgroup](docs/modules/sudocmdgroup.md): sudocmdgroup management
+* [ipasudorule](docs/modules/sudorule.md): sudorule management
+* [ipatopologysegment](docs/modules/topology.md): topology management
+* [ipatopologysuffix](docs/modules/topology.md): topology management
+* [ipatrust](docs/modules/trust.md): trust management
+* [ipauser](docs/modules/user.md): user management
+* [ipavault](docs/modules/vault.md): vault management
+
+
+System Requirements and Limitations
+===================================
+
 
 Supported FreeIPA Versions
 --------------------------
@@ -37,6 +65,7 @@ Supported FreeIPA Versions
 FreeIPA versions 4.6 and up are supported by all roles.
 
 The client role supports versions 4.4 and up, the server role is working with versions 4.5 and up, the replica role is currently only working with versions 4.6 and up.
+
 
 Supported Distributions
 -----------------------
@@ -46,17 +75,21 @@ Supported Distributions
 * Ubuntu
 * Debian 10+ (ipaclient only, no server or replica!)
 
+
 Requirements
 ------------
 
 **Controller**
 * Ansible version: 2.8+ (ansible-freeipa is an Ansible Collection)
-* /usr/bin/kinit is required on the controller if a one time password (OTP) is used
-* python3-gssapi is required on the controller if a one time password (OTP) is used with keytab to install the client.
+* /usr/bin/kinit is required on the controller if a one time password
+(OTP) is used
+* python3-gssapi is required on the controller if a one time password
+(OTP) is used with keytab to install the client.
 
 **Node**
 * Supported FreeIPA version (see above)
 * Supported distribution (needed for package installation only, see above)
+
 
 Limitations
 -----------
@@ -71,6 +104,7 @@ Work is planned to have a new method to handle CSR for external signed CAs in a 
 Usage
 =====
 
+
 How to use ansible-freeipa
 --------------------------
 
@@ -78,10 +112,11 @@ How to use ansible-freeipa
 
 The simplest method for now is to clone this repository on the controller from github directly and to start the deployment from the ansible-freeipa directory:
 
-```bash
+```
 git clone https://github.com/freeipa/ansible-freeipa.git
 cd ansible-freeipa
 ```
+
 You can use the roles directly within the top directory of the git repo, but to be able to use the management modules in the plugins subdirectory, you have to either adapt `ansible.cfg` or create links for the roles, modules or directories.
 
 You can either adapt ansible.cfg:
@@ -108,7 +143,7 @@ There are RPM packages available for Fedora 29+. These are installing the roles 
 
 This command will get the whole collection from galaxy:
 
-```bash
+```
 ansible-galaxy collection install freeipa.ansible_freeipa
 ```
 
@@ -116,7 +151,7 @@ Installing collections using the ansible-galaxy command is only supported with a
 
 The mazer tool can be used for to install the collection for ansible 2.8:
 
-```bash
+```
 mazer install freeipa.ansible_freeipa
 ```
 
@@ -132,13 +167,16 @@ The most important parts of the inventory file is the definition of the nodes, s
 
 **Master server**
 
-The master server is defined within the ```[ipaserver]``` group:
-```yaml
+The master server is defined within the `[ipaserver]` group:
+
+```
 [ipaserver]
 ipaserver.test.local
 ```
-There are variables that need to be set like ```domain```, ```realm```, ```admin password``` and ```dm password```. These can be set in the ```[ipaserver:vars]``` section:
-```yaml
+
+There are variables that need to be set like `domain`, `realm`, `admin password` and `dm password`. These can be set in the `[ipaserver:vars]` section:
+
+```
 [ipaserver:vars]
 ipaadmin_password=ADMPassword1
 ipadm_password=DMPassword1
@@ -146,54 +184,62 @@ ipaserver_domain=test.local
 ipaserver_realm=TEST.LOCAL
 ```
 
-The admin principle is ```admin``` by default. Please set ```ipaadmin_principal``` if you need to change it.
+The admin principle is `admin` by default. Please set `ipaadmin_principal` if you need to change it.
 
-You can also add more setting here, like for example to enable the DNS server or to set auto-forwarders:
-```yaml
+You can also add more setting here, like for example to enable the DNS
+server or to set auto-forwarders:
+```
 [ipaserver:vars]
 ipaserver_setup_dns=yes
 ipaserver_auto_forwarders=yes
 ```
 
 But also to skip package installation or firewalld configuration:
-```yaml
+
+```
 [ipaserver:vars]
 ipaserver_install_packages=no
 ipaserver_setup_firewalld=no
 ```
-The installation of packages and also the configuration of the firewall are by default enabled.
-Note that it is not enough to mask systemd firewalld service to skip the firewalld configuration. You need to set the variable to `no`.
+The installation of packages and also the configuration of the firewall are by default enabled. Note that it is not enough to mask systemd firewalld service to skip the firewalld configuration. You need to set the variable to `no`.
 
 For more server settings, please have a look at the [server role documentation](roles/ipaserver/README.md).
 
 **Replica**
 
-The replicas are defined within the ```[ipareplicas]``` group:
-```yaml
+The replicas are defined within the `[ipareplicas]` group:
+
+```
 [ipareplicas]
 ipareplica1.test.local
 ipareplica2.test.local
 ```
 
-If the master server is already deployed and there are DNS txt records to be able to auto-detect the server, then it is not needed to set ```domain``` or ```realm``` for the replica deployment. But it might be needed to set the master server of a replica because of the topology. If this is needed, it can be set either in the ```[ipareplicas:vars]``` section if it will apply to all the replicas in the ```[ipareplicas]``` group or it is possible to set this also per replica in the ```[ipareplicas]``` group:
-```yaml
+If the master server is already deployed and there are DNS txt records to be able to auto-detect the server, then it is not needed to set `domain` or `realm` for the replica deployment. But it might be needed to set the master server of a replica because of the topology. If this is needed, it can be set either in the `[ipareplicas:vars]` section if it will apply to all the replicas in the `[ipareplicas]` group or it is possible to set this also per replica in the
+`[ipareplicas]` group:
+
+```
 [ipareplicas]
 ipareplica1.test.local
 ipareplica2.test.local ipareplica_servers=ipareplica1.test.local
 ```
-This will create a chain from ```ipaserver.test.local <- ipareplica1.test.local <- ipareplica2.test.local```.
 
-If you need to set more than one server for a replica (for fallbacks etc.), simply use a comma separated list for ```ipareplica_servers```:
-```yaml
+This will create a chain from `ipaserver.test.local <- ipareplica1.test.local <- ipareplica2.test.local`.
+
+If you need to set more than one server for a replica (for fallbacks etc.), simply use a comma separated list for `ipareplica_servers`:
+
+```
 [ipareplicas_tier1]
 ipareplica1.test.local
 
 [ipareplicas_tier2]
-ipareplica2.test.local ipareplica_servers=ipareplica1.test.local,ipaserver.test.local
+ipareplica2.test.local
+ipareplica_servers=ipareplica1.test.local,ipaserver.test.local
 ```
-The first entry in ```ipareplica_servers``` will be used as the master.
+The first entry in `ipareplica_servers` will be used as the master.
 
 In this case you need to have separate tasks in the playbook to first deploy replicas from tier1 and then replicas from tier2:
+
 ```yaml
 ---
 - name: Playbook to configure IPA replicas (tier1)
@@ -214,7 +260,8 @@ In this case you need to have separate tasks in the playbook to first deploy rep
 ```
 
 You can add settings for replica deployment:
-```yaml
+
+```
 [ipareplicas:vars]
 ipaadmin_password=ADMPassword1
 ipadm_password=DMPassword1
@@ -223,7 +270,7 @@ ipaserver_realm=TEST.LOCAL
 ```
 
 You can also add more setting here, like for example to setup DNS or to enable auto-forwarders:
-```yaml
+```
 [ipareplica:vars]
 ipaserver_setup_dns=yes
 ipaserver_auto_forwarders=yes
@@ -231,22 +278,22 @@ ipaserver_auto_forwarders=yes
 
 If you need to skip package installation or firewalld configuration:
 
-```yaml
+```
 [ipareplicas:vars]
 ipareplica_install_packages=no
 ipareplica_setup_firewalld=no
 ```
 
-The installation of packages and also the configuration of the firewall are by default enabled.
-Note that it is not enough to mask systemd firewalld service to skip the firewalld configuration. You need to set the variable to `no`.
+The installation of packages and also the configuration of the firewall are by default enabled. Note that it is not enough to mask systemd firewalld service to skip the firewalld configuration. You need to set the variable to `no`.
 
 For more replica settings, please have a look at the [replica role documentation](roles/ipareplica/README.md).
 
 
 **Client**
 
-Clients are defined within the [ipaclients] group:
-```yaml
+Clients are defined within the `[ipaclients]` group:
+
+```
 [ipaclients]
 ipaclient1.test.local
 ipaclient2.test.local
@@ -254,27 +301,30 @@ ipaclient3.test.local
 ipaclient4.test.local
 ```
 
-For simple setups or in defined client environments it might not be needed to set domain or realm for the replica deployment. But it might be needed to set the master server of a client because of the topology. If this is needed, it can be set either in the [ipaclients:vars} section if it will apply to all the clients in the [ipaclients] group or it is possible to set this also per client in the [ipaclients] group:
-```yaml
+For simple setups or in defined client environments it might not be needed to set domain or realm for the replica deployment. But it might be needed to set the master server of a client because of the topology. If this is needed, it can be set either in the `[ipaclients:vars]`section if it will apply to all the clients in the `[ipaclients]` group or it is possible to set this also per client in the `[ipaclients]` group:
+
+```
 [ipaclients]
 ipaclient1.test.local ipaclient_servers=ipareplica1.test.local
 ipaclient2.test.local ipaclient_servers=ipareplica1.test.local
 ipaclient3.test.local ipaclient_servers=ipareplica2.test.local
 ipaclient4.test.local ipaclient_servers=ipareplica2.test.local
 ```
-If you need to set more than one server for a client (for fallbacks etc.), simply use a comma separated list for ```ipaclient_servers```.
+
+If you need to set more than one server for a client (for fallbacks etc.), simply use a comma separated list for `ipaclient_servers`.
 
 You can add settings for client deployment:
-```yaml
+
+```
 [ipaclients:vars]
 ipaadmin_password=ADMPassword1
 ipaserver_domain=test.local
 ipaserver_realm=TEST.LOCAL
 ```
 
-For enhanced security it is possible to use a auto-generated one-time-password (OTP). This will be generated on the controller using the (first) server. It is needed to have the Python gssapi bindings installed on the controller for this.
-To enable the generation of the one-time-password:
-```yaml
+For enhanced security it is possible to use a auto-generated one-time-password (OTP). This will be generated on the controller using the (first) server. It is needed to have the Python `gssapi` bindings installed on the controller for this. To enable the generation of the one-time-password:
+
+```
 [ipaclients:vars]
 ipaclient_use_otp=yes
 ```
@@ -283,8 +333,9 @@ For more client settings, please have a look at the [client role documentation](
 
 **Cluster**
 
-If you want to deploy more than a master server at once, then it will be good to define a new group like ```[ipacluster]``` that contains all the other groups ```[ipaserver]```, ```[ipareplicas]``` and ```[ipaclients]```. This way it is not needed to set ```domain```, ```realm```, ```admin password``` or ```dm password``` for the single groups:
-```yaml
+If you want to deploy more than a master server at once, then it will be good to define a new group like `[ipacluster]` that contains all the other groups `[ipaserver]`, `[ipareplicas]` and `[ipaclients]`. This way it is not needed to set `domain`, `realm`, `admin password` or `dm password` for the single groups:
+
+```
 [ipacluster:children]
 ipaserver
 ipareplicas
@@ -296,7 +347,7 @@ ipadm_password=DMPassword1
 ipaserver_domain=test.local
 ipaserver_realm=TEST.LOCAL
 ```
-All these settings will be available in the ```[ipaserver]```, ```[ipareplicas]``` and ```[ipaclient]``` groups.
+All these settings will be available in the `[ipaserver]`, `[ipareplicas]` and `[ipaclient]` groups.
 
 **Topology**
 
@@ -333,13 +384,13 @@ With this playbook it is possible to add a list of topology segments using the `
 ```
 
 
-
-Playbooks
-=========
+Example Playbooks
+=================
 
 The playbooks needed to deploy or undeploy server, replicas and clients are part of the repository and placed in the playbooks folder. There are also playbooks to deploy and undeploy clusters. With them it is only needed to add an inventory file:
+
 ```
-playbooks\
+playbooks/
         install-client.yml
         install-cluster.yml
         install-replica.yml
@@ -350,15 +401,20 @@ playbooks\
         uninstall-server.yml
 ```
 
+Under [playbooks](playbooks/) there are also example playbooks for common tasks for each provided module.
+
+
 How to deploy a master server
 -----------------------------
+
+This will deploy the master server defined in the inventory file:
 
 ```bash
 ansible-playbook -v -i inventory/hosts install-server.yml
 ```
-This will deploy the master server defined in the inventory file.
 
 If Ansible vault is used for passwords, then it is needed to adapt the playbooks in this way:
+
 ```yaml
 ---
 - name: Playbook to configure IPA servers
@@ -372,66 +428,37 @@ If Ansible vault is used for passwords, then it is needed to adapt the playbooks
     state: present
 ```
 
-It is also needed to provide the vault password file on the ansible-playbook command line:
-```bash
-ansible-playbook -v -i inventory/hosts --vault-password-file .vaul_pass.txt install-server.yml
+It is also needed to provide the Ansible vault password file on the ansible-playbook command line:
+
+```
+ansible-playbook -v -i inventory/hosts --vault-password-file .vault_pass.txt install-server.yml
 ```
 
 How to deploy a replica
 -----------------------
 
-```bash
+This will deploy the replicas defined in the inventory file:
+
+```
 ansible-playbook -v -i inventory/hosts install-replica.yml
 ```
-This will deploy the replicas defined in the inventory file.
+
 
 How to setup a client
 ---------------------
 
-```bash
+This will deploy the clients defined in the inventory file:
+
+```
 ansible-playbook -v -i inventory/hosts install-client.yml
 ```
-This will deploy the clients defined in the inventory file.
+
 
 How to deploy a cluster
 -----------------------
 
-```bash
+This will deploy the server, replicas and clients defined in the inventory file:
+
+```
 ansible-playbook -v -i inventory/hosts install-cluster.yml
 ```
-This will deploy the server, replicas and clients defined in the inventory file.
-
-
-Roles
-=====
-
-* [Server](roles/ipaserver/README.md)
-* [Replica](roles/ipareplica/README.md)
-* [Client](roles/ipaclient/README.md)
-
-Modules in plugin/modules
-=========================
-
-* [ipadnsconfig](README-dnsconfig.md)
-* [ipadnsforwardzone](README-dnsforwardzone.md)
-* [ipadnsrecord](README-dnsrecord.md)
-* [ipadnszone](README-dnszone.md)
-* [ipagroup](README-group.md)
-* [ipahbacrule](README-hbacrule.md)
-* [ipahbacsvc](README-hbacsvc.md)
-* [ipahbacsvcgroup](README-hbacsvc.md)
-* [ipahost](README-host.md)
-* [ipahostgroup](README-hostgroup.md)
-* [ipapwpolicy](README-pwpolicy.md)
-* [iparole](README-role.md)
-* [ipaservice](README-service.md)
-* [ipasudocmd](README-sudocmd.md)
-* [ipasudocmdgroup](README-sudocmdgroup.md)
-* [ipasudorule](README-sudorule.md)
-* [ipatopologysegment](README-topology.md)
-* [ipatopologysuffix](README-topology.md)
-* [ipatrust](README-trust.md)
-* [ipauser](README-user.md)
-* [ipavault](README-vault.md)
-
-If you want to write a new module please read [writing a new module](plugins/modules/README.md).
