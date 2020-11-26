@@ -14,7 +14,7 @@
     register: previousconfig
 
   - debug:
-      msg: "{{previousconfig}}"
+      msg: "{{ previousconfig }}"
 
   # setup environment.
   - name: create test group
@@ -333,26 +333,26 @@
   - name: reset changed fields
     ipaconfig:
       ipaadmin_password: 'SomeADMINpassword'
-      maxusername: '{{previousconfig.config.maxusername | default(omit)}}'
-      homedirectory: '{{previousconfig.config.homedirectory | default(omit)}}'
-      defaultshell: '{{previousconfig.config.defaultshell | default(omit)}}'
-      defaultgroup: '{{previousconfig.config.defaultgroup | default(omit)}}'
-      emaildomain: '{{previousconfig.config.emaildomain | default(omit)}}'
-      searchtimelimit: '{{previousconfig.config.searchtimelimit | default(omit)}}'
-      searchrecordslimit: '{{previousconfig.config.searchrecordslimit | default(omit)}}'
-      usersearch: '{{previousconfig.config.usersearch | default(omit)}}'
-      groupsearch: '{{previousconfig.config.groupsearch | default(omit)}}'
-      enable_migration: '{{previousconfig.config.enable_migration | default(omit)}}'
-      groupobjectclasses: '{{previousconfig.config.groupobjectclasses | default(omit)}}'
-      userobjectclasses: '{{previousconfig.config.userobjectclasses | default(omit)}}'
-      pwdexpnotify: '{{previousconfig.config.pwdexpnotify | default(omit)}}'
-      configstring: '{{previousconfig.config.configstring | default(omit)}}'
-      selinuxusermapdefault: '{{previousconfig.config.selinuxusermapdefault | default(omit)}}'
-      selinuxusermaporder: '{{previousconfig.config.selinuxusermaporder | default(omit)}}'
-      pac_type: '{{previousconfig.config.pac_type | default(omit)}}'
-      user_auth_type: '{{previousconfig.config.user_auth_type | default(omit)}}'
-      domain_resolution_order: '{{previousconfig.config.domain_resolution_order | default(omit)}}'
-      ca_renewal_master_server: '{{previousconfig.config.ca_renewal_master_server | default(omit)}}'
+      maxusername: '{{ previousconfig.config.maxusername | default(omit) }}'
+      homedirectory: '{{ previousconfig.config.homedirectory | default(omit) }}'
+      defaultshell: '{{ previousconfig.config.defaultshell | default(omit) }}'
+      defaultgroup: '{{ previousconfig.config.defaultgroup | default(omit) }}'
+      emaildomain: '{{ previousconfig.config.emaildomain | default(omit) }}'
+      searchtimelimit: '{{ previousconfig.config.searchtimelimit | default(omit) }}'
+      searchrecordslimit: '{{ previousconfig.config.searchrecordslimit | default(omit) }}'
+      usersearch: '{{ previousconfig.config.usersearch | default(omit) }}'
+      groupsearch: '{{ previousconfig.config.groupsearch | default(omit) }}'
+      enable_migration: '{{ previousconfig.config.enable_migration | default(omit) }}'
+      groupobjectclasses: '{{ previousconfig.config.groupobjectclasses | default(omit) }}'
+      userobjectclasses: '{{ previousconfig.config.userobjectclasses | default(omit) }}'
+      pwdexpnotify: '{{ previousconfig.config.pwdexpnotify | default(omit) }}'
+      configstring: '{{ previousconfig.config.configstring | default(omit) }}'
+      selinuxusermapdefault: '{{ previousconfig.config.selinuxusermapdefault | default(omit) }}'
+      selinuxusermaporder: '{{ previousconfig.config.selinuxusermaporder | default(omit) }}'
+      pac_type: '{{ previousconfig.config.pac_type | default(omit) }}'
+      user_auth_type: '{{ previousconfig.config.user_auth_type | default(omit) }}'
+      domain_resolution_order: '{{ previousconfig.config.domain_resolution_order | default(omit) }}'
+      ca_renewal_master_server: '{{ previousconfig.config.ca_renewal_master_server | default(omit) }}'
     register: result
     failed_when: not result.changed
 
@@ -360,32 +360,32 @@
     block:
       - ipaconfig:
           ipaadmin_password: SomeADMINpassword
-          maxhostname: '{{previousconfig.config.maxhostname | default(omit)}}'
+          maxhostname: '{{ previousconfig.config.maxhostname | default(omit) }}'
     when: ipa_version is version('4.8.0', '>=')
 
   - name: reset changed fields, again
     ipaconfig:
       ipaadmin_password: 'SomeADMINpassword'
-      maxusername: '{{previousconfig.config.maxusername | default(omit)}}'
-      homedirectory: '{{previousconfig.config.homedirectory | default(omit)}}'
-      defaultshell: '{{previousconfig.config.defaultshell | default(omit)}}'
-      defaultgroup: '{{previousconfig.config.defaultgroup | default(omit)}}'
-      emaildomain: '{{previousconfig.config.emaildomain | default(omit)}}'
-      searchtimelimit: '{{previousconfig.config.searchtimelimit | default(omit)}}'
-      searchrecordslimit: '{{previousconfig.config.searchrecordslimit | default(omit)}}'
-      usersearch: '{{previousconfig.config.usersearch | default(omit)}}'
-      groupsearch: '{{previousconfig.config.groupsearch | default(omit)}}'
-      enable_migration: '{{previousconfig.config.enable_migration | default(omit)}}'
-      groupobjectclasses: '{{previousconfig.config.groupobjectclasses | default(omit)}}'
-      userobjectclasses: '{{previousconfig.config.userobjectclasses | default(omit)}}'
-      pwdexpnotify: '{{previousconfig.config.pwdexpnotify | default(omit)}}'
-      configstring: '{{previousconfig.config.configstring | default(omit)}}'
-      selinuxusermapdefault: '{{previousconfig.config.selinuxusermapdefault | default(omit)}}'
-      selinuxusermaporder: '{{previousconfig.config.selinuxusermaporder | default(omit)}}'
-      pac_type: '{{previousconfig.config.pac_type | default(omit)}}'
-      user_auth_type: '{{previousconfig.config.user_auth_type | default(omit)}}'
-      domain_resolution_order: '{{previousconfig.config.domain_resolution_order | default(omit)}}'
-      ca_renewal_master_server: '{{previousconfig.config.ca_renewal_master_server | default(omit)}}'
+      maxusername: '{{ previousconfig.config.maxusername | default(omit) }}'
+      homedirectory: '{{ previousconfig.config.homedirectory | default(omit) }}'
+      defaultshell: '{{ previousconfig.config.defaultshell | default(omit) }}'
+      defaultgroup: '{{ previousconfig.config.defaultgroup | default(omit) }}'
+      emaildomain: '{{ previousconfig.config.emaildomain | default(omit) }}'
+      searchtimelimit: '{{ previousconfig.config.searchtimelimit | default(omit) }}'
+      searchrecordslimit: '{{ previousconfig.config.searchrecordslimit | default(omit) }}'
+      usersearch: '{{ previousconfig.config.usersearch | default(omit) }}'
+      groupsearch: '{{ previousconfig.config.groupsearch | default(omit) }}'
+      enable_migration: '{{ previousconfig.config.enable_migration | default(omit) }}'
+      groupobjectclasses: '{{ previousconfig.config.groupobjectclasses | default(omit) }}'
+      userobjectclasses: '{{ previousconfig.config.userobjectclasses | default(omit) }}'
+      pwdexpnotify: '{{ previousconfig.config.pwdexpnotify | default(omit) }}'
+      configstring: '{{ previousconfig.config.configstring | default(omit) }}'
+      selinuxusermapdefault: '{{ previousconfig.config.selinuxusermapdefault | default(omit) }}'
+      selinuxusermaporder: '{{ previousconfig.config.selinuxusermaporder | default(omit) }}'
+      pac_type: '{{ previousconfig.config.pac_type | default(omit) }}'
+      user_auth_type: '{{ previousconfig.config.user_auth_type | default(omit) }}'
+      domain_resolution_order: '{{ previousconfig.config.domain_resolution_order | default(omit) }}'
+      ca_renewal_master_server: '{{ previousconfig.config.ca_renewal_master_server | default(omit) }}'
     register: result
     failed_when: result.changed
 
@@ -393,7 +393,7 @@
     block:
       - ipaconfig:
           ipaadmin_password: SomeADMINpassword
-          maxhostname: '{{previousconfig.config.maxhostname | default(omit)}}'
+          maxhostname: '{{ previousconfig.config.maxhostname | default(omit) }}'
     when: ipa_version is version('4.8.0', '>=')
 
   # cleanup
