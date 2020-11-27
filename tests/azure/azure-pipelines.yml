@@ -13,6 +13,7 @@
 ---
 trigger:
 - master
+- test_upstream_multihost
 
 pool:
   vmImage: 'ubuntu-18.04'
