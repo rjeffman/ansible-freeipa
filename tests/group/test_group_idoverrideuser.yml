@@ -1,0 +1,79 @@
+---
+- name: Test group
+  hosts: ipaserver
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - include_tasks: ../env_freeipa_facts.yml
+
+    - block:
+      - name: Remove testing groups.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name:
+          - idovergroup
+          state: absent
+
+      - name: Add group with idoverride.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name: idovergroup
+          idoverride: aduser@ad.ipa.test
+        register: result
+        failed_when: result.failed or not result.changed
+
+      - name: Add group with idoverride, again.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name: idovergroup
+          idoverride: aduser@ad.ipa.test
+        register: result
+        failed_when: result.failed or result.changed
+
+      - name: Remove idoverride member.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name: idovergroup
+          idoverride: aduser@ad.ipa.test
+          action: member
+          state: absent
+        register: result
+        failed_when: result.failed or not result.changed
+
+      - name: Remove idoverride member, again.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name: idovergroup
+          idoverride: aduser@ad.ipa.test
+          action: member
+          state: absent
+        register: result
+        failed_when: result.failed or result.changed
+
+      - name: Add idoverride member.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name: idovergroup
+          idoverride: aduser@ad.ipa.test
+          action: member
+        register: result
+        failed_when: result.failed or not result.changed
+
+      - name: Add idoverride member, again.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name: idovergroup
+          idoverride: aduser@ad.ipa.test
+          action: member
+        register: result
+        failed_when: result.failed or result.changed
+
+      - name: Remove testing groups.
+        ipagroup:
+          ipaadmin_password: SomeADMINpassword
+          name:
+          - idovergroup
+          state: absent
+
+      when: trust_test_is_supported | default(false)

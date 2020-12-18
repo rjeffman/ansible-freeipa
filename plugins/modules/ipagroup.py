@@ -98,6 +98,12 @@ options:
     required: false
     type: list
     ailases: ["ipaexternalmember", "external_member"]
+  idoverride:
+    description:
+    - User ID overrides to add
+    required: false
+    type: list
+    ailases: ["idoverrideuser", "id_override"]
   action:
     description: Work on group or member level
     default: group
@@ -330,6 +336,7 @@ def main():
     gid = module_params_get(ansible_module, "gid")
     nonposix = module_params_get(ansible_module, "nonposix")
     external = module_params_get(ansible_module, "external")
+    idoverride = module_params_get(ansible_module, "idoverride")
     posix = module_params_get(ansible_module, "posix")
     nomembers = module_params_get(ansible_module, "nomembers")
     user = module_params_get(ansible_module, "user")
@@ -399,6 +406,12 @@ def main():
                 "by your IPA version"
             )
 
+        has_idoverrideuser = api_check_param("group_add_member", "service")
+        if idoverride is not None and not has_idoverrideuser:
+            ansible_module.fail_json(
+                msg="Managing a idoverrideuser as part of a group is not "
+                "supported by your IPA version")
+
         commands = []
 
         for name in names:
@@ -465,6 +478,10 @@ def main():
                          externalmember_del) = gen_add_del_lists(
                             externalmember, res_find.get("member_external"))
 
+                        (idoverrides_add,
+                         idoverrides_add) = gen_add_del_lists(
+                            externalmember, res_find.get("member_idoverride"))
+
                         # setup member args for add/remove members.
                         add_member_args = {
                             "user": user_add,
@@ -477,6 +494,10 @@ def main():
                         if has_add_member_service:
                             add_member_args["service"] = service_add
                             del_member_args["service"] = service_del
+
+                        if has_idoverrideuser:
+                            add_member_args["idoverrideuser"] = service_add
+                            del_member_args["idoverrideuser"] = service_del
 
                         if is_external_group(res_find):
                             add_member_args["ipaexternalmember"] = \
@@ -548,6 +569,8 @@ def main():
                     }
                     if has_add_member_service:
                         add_member_args["service"] = service
+                    if has_idoverrideuser:
+                        add_member_args["idoverrideuser"] = service
                     if is_external_group(res_find):
                         add_member_args["ipaexternalmember"] = externalmember
                     elif externalmember:
@@ -588,6 +611,8 @@ def main():
                     }
                     if has_add_member_service:
                         del_member_args["service"] = service
+                    if has_idoverrideuser:
+                        add_member_args["idoverrideuser"] = service
                     if is_external_group(res_find):
                         del_member_args["ipaexternalmember"] = externalmember
                     elif externalmember:

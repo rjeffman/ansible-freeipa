@@ -167,6 +167,7 @@ Variable | Description | Required
 `membermanager_user` | List of member manager users assigned to this group. Only usable with IPA versions 4.8.4 and up. | no
 `membermanager_group` | List of member manager groups assigned to this group. Only usable with IPA versions 4.8.4 and up. | no
 `externalmember` \| `ipaexternalmember`  \| `external_member`| List of members of a trusted domain in DOM\\name or name@domain form. | no
+`idoverride` \| `idoverrideuser`  \| `id_override`| List of user ID overrides to manage. | no
 `action` | Work on group or member level. It can be on of `member` or `group` and defaults to `group`. | no
 `state` | The state to ensure. It can be one of `present` or `absent`, default: `present`. | yes
 
