@@ -232,7 +232,9 @@ def main():
 
                     # New attribute list (add given ones to find result)
                     # Make list with unique entries
-                    attrs = list(set(list(res_find["attrs"]) + attribute))
+                    attrs = list(
+                        set(list(res_find.get("attrs", [])) + attribute)
+                    )
                     if len(attrs) > len(res_find["attrs"]):
                         commands.append([name, "selfservice_mod",
                                          {"attrs": attrs}])

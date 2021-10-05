@@ -366,7 +366,7 @@ def main():
 
                     for _member, _member_change in check_members.items():
                         if _member_change is not None:
-                            _res_list = res_find[_member]
+                            _res_list = res_find.get(_member, [])
                             # if running in a client context, data may be
                             # returned as a tuple instead of a list.
                             if isinstance(_res_list, tuple):
