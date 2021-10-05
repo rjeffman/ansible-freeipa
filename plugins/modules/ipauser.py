@@ -1048,6 +1048,9 @@ def main():
                 ansible_module.fail_json(msg="User '%s' is not valid" %
                                          repr(user))
 
+            if name is None:
+                raise Exception(msg="User is not defined.")
+
             # Fix principals: add realm if missing
             # We need the connected API for the realm, therefore it can not
             # be part of check_parameters as this is used also before the
