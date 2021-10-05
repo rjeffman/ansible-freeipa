@@ -339,6 +339,9 @@ def main():
                 if res_find is None:
                     ansible_module.fail_json(
                         msg="Server '%s' not found" % name)
+                    # if for whatever reason fail_json don't halt
+                    # execution, use an empty res_find
+                    res_find = {}
 
                 # Remove location from args if "" (transformed to None)
                 # and "ipalocation_location" not in res_find for idempotency

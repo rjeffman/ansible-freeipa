@@ -417,6 +417,9 @@ def main():
                 elif action == "member":
                     if res_find is None:
                         ansible_module.fail_json(msg="No hbacrule '%s'" % name)
+                        # if for whatever reason fail_json don't halt
+                        # execution, use an empty res_find
+                        res_find = {}
 
                     # Generate add lists for host, hostgroup and
                     # res_find to only try to add hosts and hostgroups

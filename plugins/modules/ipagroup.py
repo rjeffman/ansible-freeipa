@@ -513,6 +513,9 @@ def main():
                 elif action == "member":
                     if res_find is None:
                         ansible_module.fail_json(msg="No group '%s'" % name)
+                        # if for whatever reason fail_json don't halt
+                        # execution, use an empty res_find
+                        res_find = {}
 
                     add_member_args = {
                         "user": user,
