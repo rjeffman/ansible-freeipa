@@ -2,9 +2,15 @@
 
 INFO="\033[37;1m"
 WARN="\033[33;1m"
+FATAL="\033[31;1m"
 RST="\033[0m"
 
-pushd "`dirname $0`/.." >/dev/null 2>&1
+die() {
+    echo -e "${FATAL}FATAL: $*${RST}"
+    exit 1
+}
+
+pushd "`dirname $0`/.." >/dev/null 2>&1 || die "Could not change to proper directory."
 
 echo -e "${INFO}Running 'flake8'...${RST}"
 flake8 plugins utils roles *.py
@@ -38,4 +44,4 @@ yaml_dirs=(
 )
 yamllint -f colored "${yaml_dirs[@]}"
 
-popd >/dev/null 2>&1
+popd >/dev/null 2>&1 || die "Could get back to original directory."
