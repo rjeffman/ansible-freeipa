@@ -5,7 +5,7 @@ platforms:
   - name: fedora-latest-build
     image: "fedora:latest"
     dockerfile: Dockerfile
-    hostname: ipaserver.test.local
+    # hostname: ipaserver.test.local
     dns_servers:
       - 8.8.8.8
     volumes:

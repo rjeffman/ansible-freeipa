@@ -21,7 +21,14 @@ rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
 rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*; \
-rm -rf /var/cache/dnf/;
+rm -rf /var/cache/dnf/; \
+dnf --assumeyes install \
+    freeipa-server \
+    python3-libselinux \
+    freeipa-server-dns \
+    freeipa-server-trust-ad \
+    firewalld && \
+dnf clean all;
 
 STOPSIGNAL RTMIN+3
 

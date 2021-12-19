@@ -13,16 +13,17 @@
       name: nss
       state: latest  # noqa 403
 
-  - include_role:
-      name: ipaserver
-    vars:
-      ipaserver_setup_dns: yes
-      ipaserver_setup_kra: yes
-      ipaserver_auto_forwarders: yes
-      ipaserver_no_dnssec_validation: yes
-      ipaserver_auto_reverse: yes
-      ipaadmin_password: SomeADMINpassword
-      ipadm_password: SomeDMpassword
-      ipaserver_domain: test.local
-      ipaserver_realm: TEST.LOCAL
-      ipaclient_no_ntp: yes
+  # - include_role:
+  #     name: ipaserver
+  #   vars:
+  #     ipaserver_setup_dns: yes
+  #     ipaserver_setup_kra: yes
+  #     ipaserver_auto_forwarders: yes
+  #     ipaserver_no_dnssec_validation: yes
+  #     ipaserver_auto_reverse: yes
+  #     ipaadmin_password: SomeADMINpassword
+  #     ipadm_password: SomeDMpassword
+  #     ipaserver_domain: test.local
+  #     ipaserver_realm: TEST.LOCAL
+  #     ipaclient_no_ntp: yes
+  #   when: ipa_packages is not defined
