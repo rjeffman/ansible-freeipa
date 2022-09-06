@@ -18,6 +18,7 @@ pushd "${TOPDIR}" >/dev/null 2>&1 || die "Failed to change directory."
 
 files_list=$(mktemp)
 
+git remote >&2
 BASE_BRANCH=${BASE_BRANCH:-"master"}
 git diff "${BASE_BRANCH}" --name-only > "${files_list}"
 
