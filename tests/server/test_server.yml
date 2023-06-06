@@ -76,6 +76,7 @@
       ipaapi_context: "{{ ipa_context | default(omit) }}"
       name: "{{ ipa_server_name + '.' + ipaserver_domain }}"
       location: "mylocation"
+      no_members: true
     register: result
     failed_when: not result.changed or result.failed
 
@@ -85,6 +86,7 @@
       ipaapi_context: "{{ ipa_context | default(omit) }}"
       name: "{{ ipa_server_name + '.' + ipaserver_domain }}"
       location: "mylocation"
+      no_members: false
     register: result
     failed_when: result.changed or result.failed
 

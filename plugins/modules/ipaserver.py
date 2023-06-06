@@ -36,6 +36,7 @@ short_description: Manage FreeIPA server
 description: Manage FreeIPA server
 extends_documentation_fragment:
   - ipamodule_base_docs
+  - ipamodule_base_docs.nomembers
 options:
   name:
     description: The list of server name strings.
@@ -62,12 +63,6 @@ options:
   hidden:
     description: |
       Set hidden state of a server.
-      Only in state: present.
-    required: false
-    type: bool
-  no_members:
-    description: |
-      Suppress processing of membership attributes
       Only in state: present.
     required: false
     type: bool
@@ -222,7 +217,7 @@ def server_role_status(module, name):
         return _result["result"][0]
 
 
-def gen_args(location, service_weight, no_members, delete_continue,
+def gen_args(location, service_weight, delete_continue,
              ignore_topology_disconnect, ignore_last_of_role, force):
     _args = {}
     if location is not None:
@@ -232,8 +227,6 @@ def gen_args(location, service_weight, no_members, delete_continue,
             _args["ipalocation_location"] = None
     if service_weight is not None:
         _args["ipaserviceweight"] = service_weight
-    if no_members is not None:
-        _args["no_members"] = no_members
     if delete_continue is not None:
         _args["continue"] = delete_continue
     if ignore_topology_disconnect is not None:
@@ -258,7 +251,6 @@ def main():
             service_weight=dict(required=False, type='int',
                                 aliases=["ipaserviceweight"], default=None),
             hidden=dict(required=False, type='bool', default=None),
-            no_members=dict(required=False, type='bool', default=None),
             # absent
             delete_continue=dict(required=False, type='bool',
                                  aliases=["continue"], default=None),
@@ -272,6 +264,7 @@ def main():
             state=dict(type="str", default="present",
                        choices=["present", "absent"]),
         ),
+        ipa_module_options=["no_members"],
         supports_check_mode=True,
     )
 
@@ -294,7 +287,6 @@ def main():
     if service_weight == -1:
         service_weight = ""
     hidden = ansible_module.params_get("hidden")
-    no_members = ansible_module.params_get("no_members")
 
     # absent
     delete_continue = ansible_module.params_get("delete_continue")
@@ -338,9 +330,10 @@ def main():
             res_find = find_server(ansible_module, name)
 
             # Generate args
-            args = gen_args(location, service_weight, no_members,
+            args = gen_args(location, service_weight,
                             delete_continue, ignore_topology_disconnect,
                             ignore_last_of_role, force)
+            args.update(ansible_module.ipa_common_args())
 
             # Create command
             if state == "present":
