@@ -58,3 +58,11 @@ options:
     type: bool
     default: True
 """
+
+    NOMEMBERS = r"""
+options:
+  nomembers:
+    description: Suprress processing of membership attributes
+    required: false
+    type: bool
+"""

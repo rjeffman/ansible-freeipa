@@ -401,7 +401,14 @@ def compare_args_ipa(module, args, ipa, ignore=None):  # noqa
     # Create filtered_args using ignore
     if ignore is None:
         ignore = []
-    filtered_args = [key for key in args if key not in ignore]
+    # ignore IPA commom args.
+    ignore = set(ignore).union(
+        {
+            opt["ipa_mapping"]
+            for opt in IPAAnsibleModule.ipa_module_options_spec.values()
+        }
+    )
+    filtered_args = set(args.keys()).difference(ignore)
 
     for key in filtered_args:
         arg = args[key]
@@ -968,8 +975,13 @@ class IPAAnsibleModule(AnsibleModule):
 
     ipa_module_options_spec = dict(
         delete_continue=dict(
-            type="bool", default=True, aliases=["continue"]
-        )
+            type="bool", default=True, aliases=["continue"],
+            ipa_mapping="continue"
+        ),
+        no_members=dict(
+            type="bool", required=False, default=None,
+            ipa_mapping="no_members",
+        ),
     )
 
     def __init__(self, *args, **kwargs):
@@ -980,6 +992,13 @@ class IPAAnsibleModule(AnsibleModule):
             kwargs["argument_spec"] = _spec
 
         if "ipa_module_options" in kwargs:
+            invalid = [
+                opt for opt in kwargs["ipa_module_options"]
+                if opt not in self.ipa_module_options_spec
+            ]
+            if invalid:
+                raise ValueError(
+                    "Invalid ipa_module_options: %s" % ", ".join(invalid))
             _update = {
                 k: self.ipa_module_options_spec[k]
                 for k in kwargs["ipa_module_options"]
@@ -994,6 +1013,14 @@ class IPAAnsibleModule(AnsibleModule):
 
         if ANSIBLE_FREEIPA_MODULE_IMPORT_ERROR is not None:
             self.fail_json(msg=ANSIBLE_FREEIPA_MODULE_IMPORT_ERROR)
+
+    def ipa_common_args(self):
+        """Return a dict with IPA common args for this module."""
+        return {
+            v.get("ipa_mapping", k): self.params.get(k)
+            for k, v in self.ipa_module_options_spec.items()
+            if self.params.get(k) is not None
+        }
 
     @contextmanager
     def ipa_connect(self, context=None):
