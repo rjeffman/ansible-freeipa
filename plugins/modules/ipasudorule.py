@@ -37,6 +37,7 @@ short_description: Manage FreeIPA sudo rules
 description: Manage FreeIPA sudo rules
 extends_documentation_fragment:
   - ipamodule_base_docs
+  - ipamodule_base_docs.nomembers
 options:
   name:
     description: The sudorule name
@@ -76,10 +77,6 @@ options:
     required: false
     choices: ["all", ""]
     aliases: ["runasusercat"]
-  nomembers:
-    description: Suppress processing of membership attributes
-    required: false
-    type: bool
   host:
     description: List of host names assigned to this sudorule.
     required: false
@@ -249,7 +246,7 @@ def find_sudorule(module, name):
 
 
 def gen_args(description, usercat, hostcat, cmdcat, runasusercat,
-             runasgroupcat, order, nomembers):
+             runasgroupcat, order):
     _args = {}
 
     if description is not None:
@@ -266,8 +263,6 @@ def gen_args(description, usercat, hostcat, cmdcat, runasusercat,
         _args['ipasudorunasgroupcategory'] = runasgroupcat
     if order is not None:
         _args['sudoorder'] = order
-    if nomembers is not None:
-        _args['nomembers'] = nomembers
 
     return _args
 
@@ -284,7 +279,6 @@ def main():
                               choices=["all", ""], aliases=['usercat']),
             hostcategory=dict(required=False, type="str", default=None,
                               choices=["all", ""], aliases=['hostcat']),
-            nomembers=dict(required=False, type='bool', default=None),
             host=dict(required=False, type='list', elements="str",
                       default=None),
             hostgroup=dict(required=False, type='list', elements="str",
@@ -325,6 +319,7 @@ def main():
                        choices=["present", "absent",
                                 "enabled", "disabled"]),
         ),
+        ipa_module_options=['no_members'],
         supports_check_mode=True,
     )
 
@@ -347,7 +342,6 @@ def main():
     runasgroupcategory = ansible_module.params_get(         # noqa
                                            "runasgroupcategory")
     hostcategory = ansible_module.params_get("hostcategory")  # noqa
-    nomembers = ansible_module.params_get("nomembers")  # noqa
     host = ansible_module.params_get("host")
     hostgroup = ansible_module.params_get_lowercase("hostgroup")
     hostmask = ansible_module.params_get("hostmask")
@@ -382,7 +376,7 @@ def main():
         if action == "member":
             invalid = ["description", "usercategory", "hostcategory",
                        "cmdcategory", "runasusercategory",
-                       "runasgroupcategory", "order", "nomembers"]
+                       "runasgroupcategory", "order", "no_members"]
 
         else:
             if hostcategory == 'all' and any([host, hostgroup]):
@@ -401,7 +395,7 @@ def main():
             ansible_module.fail_json(msg="No name given.")
         invalid = ["description", "usercategory", "hostcategory",
                    "cmdcategory", "runasusercategory",
-                   "runasgroupcategory", "nomembers", "order"]
+                   "runasgroupcategory", "no_members", "order"]
         if action == "sudorule":
             invalid.extend(["host", "hostgroup", "hostmask", "user", "group",
                             "runasuser", "runasgroup", "allow_sudocmd",
@@ -417,7 +411,7 @@ def main():
                 "disabled")
         invalid = ["description", "usercategory", "hostcategory",
                    "cmdcategory", "runasusercategory", "runasgroupcategory",
-                   "nomembers", "nomembers", "host", "hostgroup", "hostmask",
+                   "no_members", "host", "hostgroup", "hostmask",
                    "user", "group", "allow_sudocmd", "allow_sudocmdgroup",
                    "deny_sudocmd", "deny_sudocmdgroup", "runasuser",
                    "runasgroup", "order", "sudooption"]
@@ -464,7 +458,8 @@ def main():
                 # Generate args
                 args = gen_args(description, usercategory, hostcategory,
                                 cmdcategory, runasusercategory,
-                                runasgroupcategory, order, nomembers)
+                                runasgroupcategory, order)
+                args.update(ansible_module.ipa_common_args())
                 if action == "sudorule":
                     # Found the sudorule
                     if res_find is not None:

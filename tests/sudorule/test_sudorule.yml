@@ -108,6 +108,26 @@
     register: result
     failed_when: result.changed or result.failed
 
+  - name: Ensure sudorule description is changed, with no_members set to true
+    ipasudorule:
+      ipaadmin_password: SomeADMINpassword
+      ipaapi_context: "{{ ipa_context | default(omit) }}"
+      name: testrule1
+      description: "Some new description."
+      no_members: true
+    register: result
+    failed_when: not result.changed or result.failed
+
+  - name: Ensure sudorule description is cleared, with no_members set to false
+    ipasudorule:
+      ipaadmin_password: SomeADMINpassword
+      ipaapi_context: "{{ ipa_context | default(omit) }}"
+      name: testrule1
+      description: ""
+      no_members: false
+    register: result
+    failed_when: not result.changed or result.failed
+
   - name: Ensure user01 is on the list of users sudorule execute as.
     ipasudorule:
       ipaadmin_password: SomeADMINpassword
