@@ -37,6 +37,7 @@ short_description: Manage FreeIPA permission
 description: Manage FreeIPA permission and permission members
 extends_documentation_fragment:
   - ipamodule_base_docs
+  - ipamodule_base_docs.nomembers
 options:
   name:
     description: The permission name string.
@@ -109,10 +110,6 @@ options:
     type: str
     required: false
     aliases: ["type"]
-  no_members:
-    description: Suppress processing of membership
-    required: false
-    type: bool
   rename:
     description: Rename the permission object
     type: str
@@ -171,7 +168,7 @@ def find_permission(module, name):
 def gen_args(right, attrs, bindtype, subtree,
              extra_target_filter, rawfilter, target,
              targetto, targetfrom, memberof, targetgroup,
-             object_type, no_members, rename):
+             object_type, rename):
     _args = {}
     if right is not None:
         _args["ipapermright"] = right
@@ -197,8 +194,6 @@ def gen_args(right, attrs, bindtype, subtree,
         _args["targetgroup"] = targetgroup
     if object_type is not None:
         _args["type"] = object_type
-    if no_members is not None:
-        _args["no_members"] = no_members
     if rename is not None:
         _args["rename"] = rename
     return _args
@@ -256,7 +251,6 @@ def main():
             targetgroup=dict(type="str", default=None, required=False),
             object_type=dict(type="str", aliases=["type"], default=None,
                              required=False),
-            no_members=dict(type="bool", default=None, required=False),
             rename=dict(type="str", default=None, required=False,
                         aliases=["new_name"]),
             action=dict(type="str", default="permission",
@@ -265,6 +259,7 @@ def main():
             state=dict(type="str", default="present",
                        choices=["present", "absent", "renamed"]),
         ),
+        ipa_module_options=["no_members"],
         supports_check_mode=True,
     )
 
@@ -288,7 +283,6 @@ def main():
     memberof = ansible_module.params_get("memberof")
     targetgroup = ansible_module.params_get("targetgroup")
     object_type = ansible_module.params_get("object_type")
-    no_members = ansible_module.params_get("no_members")
     rename = ansible_module.params_get("rename")
     action = ansible_module.params_get("action")
 
@@ -361,7 +355,8 @@ def main():
                 args = gen_args(right, attrs, bindtype, subtree,
                                 extra_target_filter, rawfilter, target,
                                 targetto, targetfrom, memberof, targetgroup,
-                                object_type, no_members, rename)
+                                object_type, rename)
+                args.update(ansible_module.ipa_common_args())
 
                 if action == "permission":
                     # Found the permission
@@ -416,8 +411,8 @@ def main():
                     args = gen_args(right, attrs, bindtype, subtree,
                                     extra_target_filter, rawfilter, target,
                                     targetto, targetfrom, memberof,
-                                    targetgroup, object_type, no_members,
-                                    rename)
+                                    targetgroup, object_type, rename)
+                    args.update(ansible_module.ipa_common_args())
 
                     # Found the permission
                     if res_find is not None:
