@@ -36,8 +36,7 @@ EOF
 
 name="ansible-freeipa-image-builder"
 hostname="ipaserver.test.local"
-# Number of cpus is not available in usptream CI (Ubuntu 22.04).
-# cpus="2"
+cpus="2"
 memory="3g"
 quayname="quay.io/ansible-freeipa/upstream-tests"
 deploy_server="N"
@@ -82,7 +81,7 @@ container_remove_image_if_exists "${tag}"
     container_remove_image_if_exists "${server_tag}"
 
 container_build "${tag}" "${BASEDIR}/dockerfile/${distro}" "${BASEDIR}"
-container_create "${name}" "${tag}" "${hostname}" "${memory}"
+container_create "${name}" "${tag}" "${hostname}" "${memory}" "${cpus}"
 container_commit "${name}" "${quayname}:${tag}"
 
 if [ "${deploy_server}" == "Y" ]
