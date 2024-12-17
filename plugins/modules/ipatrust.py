@@ -48,7 +48,7 @@ options:
     type: str
     default: ad
     required: false
-    choices: ["ad"]
+    choices: ["ad", "ipa"]
   admin:
     description:
     - Active Directory domain administrator
@@ -208,7 +208,7 @@ def main():
                        choices=["present", "absent"]),
             # present
             trust_type=dict(type="str", default="ad", required=False,
-                            choices=["ad"]),
+                            choices=["ad", "ipa"]),
             admin=dict(type="str", default=None, required=False),
             password=dict(type="str", default=None,
                           required=False, no_log=True),

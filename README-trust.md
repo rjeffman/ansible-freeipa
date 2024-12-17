@@ -89,7 +89,28 @@ Example playbook to ensure a trust is absent:
       state: absent
 ```
 
-This will only delete the ipa-side of the trust and it does NOT delete the id-range that matches the trust,
+This will only delete the ipa-side of the trust and it does NOT delete the id-range that matches the trust.
+
+Example playbook to ensure a two way trust against another IPA deployment is present:
+
+```yaml
+---
+- name: Playbook to ensure a two-way IPA-to-IPA trust is present
+  hosts: ipaserver
+  become: true
+
+  tasks:
+  - name: ensure the two-way trust is present
+    ipatrust:
+      realm: freeipa.external.test
+      admin: "admin@FREEIPA.EXTERNAL.TEST"
+      password: my_share_Secret
+      two_way: True
+      range_type: ipa-ad-trust-posix
+      state: present
+```
+
+
 
 Variables
 =========
@@ -105,7 +126,7 @@ Variable | Description | Required
 `password` | Active Directory domain administrator's password string. | no
 `server` | Domain controller for the Active Directory domain string. | no
 `trust_secret` | Shared secret for the trust string. | no
-`trust_type` | Trust type. Currently, only 'ad' for Active Directory is supported. | no
+`trust_type` | Trust type. Valid values are `ad` and `ipa`. Defaults to `ad`.  | no
 `base_id` | First posix id for the trusted domain integer. | no
 `range_size` | Size of the ID range reserved for the trusted domain integer. | no
 `range_type` | Type of trusted domain ID range, It can be one of `ipa-ad-trust` or `ipa-ad-trust-posix`and defaults to `ipa-ad-trust`. | no
@@ -116,4 +137,5 @@ Variable | Description | Required
 Authors
 =======
 
-Rob Verduijn
+- Rob Verduijn
+- Rafael Jeffman
